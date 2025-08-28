@@ -1,16 +1,26 @@
+// Clock functionality
 function startTime() {
-    var today=new Date();
-    var h=today.getHours();
-    var m=today.getMinutes();
-    var s=today.getSeconds();
-    h = checkTime(h);
-    m = checkTime(m);
-    s = checkTime(s);
-    document.getElementById("clock").innerHTML = h+":"+m+":"+s;
-    var t = setTimeout(function(){startTime()},500);
+    const today = new Date();
+    const h = today.getHours().toString().padStart(2, '0');
+    const m = today.getMinutes().toString().padStart(2, '0');
+    const s = today.getSeconds().toString().padStart(2, '0');
+    
+    document.getElementById("clock").innerHTML = `${h}:${m}:${s}`;
+    
+    // Update date
+    const options = { 
+        weekday: 'long', 
+        year: 'numeric', 
+        month: 'long', 
+        day: 'numeric' 
+    };
+    const dateStr = today.toLocaleDateString('ru-RU', options);
+    document.getElementById("date").innerHTML = dateStr;
+    
+    setTimeout(startTime, 1000);
 }
 
-function checkTime(i) {
-    if (i<10) {i = "0" + i};  // add zero in front of numbers < 10
-    return i;
-}
+// Start when page loads
+document.addEventListener('DOMContentLoaded', function() {
+    startTime();
+});
