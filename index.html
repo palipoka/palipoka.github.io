@@ -115,15 +115,23 @@
                 </div>
             </div>
             
-            <!-- Дополнительные виджеты -->
+            <!-- Новости -->
             <div class="widget">
-                <h3 class="widget-title"><i class="fas fa-newspaper"></i> Новости</h3>
-                <ul class="news-list">
-                    <li class="news-item"><a href="#"><i class="fas fa-circle"></i> Важное событие недели</a></li>
-                    <li class="news-item"><a href="#"><i class="fas fa-circle"></i> Технологические новости</a></li>
-                    <li class="news-item"><a href="#"><i class="fas fa-circle"></i> События в мире</a></li>
-                    <li class="news-item"><a href="#"><i class="fas fa-circle"></i> Культура и искусство</a></li>
-                </ul>
+                <div class="widget-header">
+                    <h3 class="widget-title"><i class="fas fa-newspaper"></i> Яндекс.Новости</h3>
+                    <button id="refresh-news" class="refresh-btn" title="Обновить новости">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                </div>
+                <div id="news-container" class="news-container">
+                    <div class="news-loading">Загрузка новостей...</div>
+                </div>
+                <div class="news-categories">
+                    <button class="news-category-btn active" data-category="index">Главное</button>
+                    <button class="news-category-btn" data-category="politics">Политика</button>
+                    <button class="news-category-btn" data-category="society">Общество</button>
+                    <button class="news-category-btn" data-category="business">Экономика</button>
+                </div>
             </div>
         </div>
     </div>
@@ -132,5 +140,6 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src="clock.js"></script>
     <script src="weather.js"></script>
+    <script src="news.js"></script>
 </body>
 </html>
