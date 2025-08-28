@@ -3,7 +3,7 @@ class YandexNews {
     constructor() {
         this.currentCategory = 'index';
         this.newsCache = {};
-        this.proxyUrl = 'https://your-domain.com/news-proxy.php'; // ЗАМЕНИТЕ на ваш URL
+        this.proxyUrl = 'https://palipoka.github.io/news-proxy.php'; // ЗАМЕНИТЕ на ваш URL
         this.init();
     }
 
@@ -211,3 +211,4 @@ const newsStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = newsStyles;
 document.head.appendChild(styleSheet);
+
