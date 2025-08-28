@@ -3,7 +3,7 @@ class YandexNews {
     constructor() {
         this.currentCategory = 'index';
         this.newsCache = {};
-        this.proxyUrl = 'https://palipoka.github.io/news-proxy.php'; // ЗАМЕНИТЕ на ваш URL
+        this.proxyUrl = 'https://palipoka.github.io/news-proxy.php'; // ЗАМЕНИТЕ НА ВАШ URL
         this.init();
     }
 
@@ -36,7 +36,6 @@ class YandexNews {
     }
 
     switchCategory(category, button) {
-        // Update active button
         document.querySelectorAll('.news-category-btn').forEach(btn => {
             btn.classList.remove('active');
         });
@@ -54,14 +53,16 @@ class YandexNews {
 
         try {
             // Проверяем кэш
-            const cacheKey = `${category}_${this.proxyUrl}`;
+            const cacheKey = `${category}`;
             if (!forceRefresh && this.newsCache[cacheKey] && 
                 Date.now() - this.newsCache[cacheKey].timestamp < 5 * 60 * 1000) {
                 this.displayNews(this.newsCache[cacheKey].data);
                 return;
             }
 
-            const response = await fetch(`${this.proxyUrl}?category=${category}&t=${Date.now()}`);
+            // Пробуем загрузить через прокси
+            const timestamp = Date.now();
+            const response = await fetch(`${this.proxyUrl}?category=${category}&t=${timestamp}`);
             
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
@@ -69,20 +70,20 @@ class YandexNews {
 
             const data = await response.json();
             
-            if (data.success) {
+            if (data.success && data.news && data.news.length > 0) {
                 this.newsCache[cacheKey] = {
                     data: data.news,
                     timestamp: Date.now()
                 };
                 this.displayNews(data.news, false);
             } else {
-                this.displayNews(data.news, true);
+                // Если нет новостей, показываем демо
+                this.showDemoNews();
             }
 
         } catch (error) {
             console.error('Ошибка загрузки новостей:', error);
-            this.showError('Ошибка загрузки. Показываем демо-новости');
-            this.showMockNews();
+            this.showDemoNews();
         }
     }
 
@@ -90,14 +91,14 @@ class YandexNews {
         const newsContainer = document.getElementById('news-container');
         
         if (!news || news.length === 0) {
-            this.showMockNews();
+            this.showDemoNews();
             return;
         }
 
         const newsList = document.createElement('ul');
         newsList.className = 'news-list';
 
-        news.forEach((item, index) => {
+        news.forEach((item) => {
             const listItem = document.createElement('li');
             listItem.className = 'news-item';
             
@@ -122,26 +123,31 @@ class YandexNews {
         }
     }
 
-    showMockNews() {
-        const mockNews = [
+    showDemoNews() {
+        const demoNews = [
             {
                 title: "ЦБ РФ сохранил ключевую ставку на уровне 16% годовых",
-                link: "https://news.yandex.ru/story/CB_RF_sokhranil_klyuchevuyu_stavku",
+                link: "https://news.yandex.ru",
                 description: "Центробанк России принял решение сохранить ключевую ставку."
             },
             {
                 title: "В Москве представлен новый план развития транспорта",
-                link: "https://news.yandex.ru/story/Novyj_plan_razvitiya_transporta",
-                description: "Власти Москвы анонсировали проект по развитию транспорта."
+                link: "https://news.yandex.ru",
+                description: "Власти Москвы анонсировали проект по развитию общественного транспорта."
             },
             {
                 title: "Ученые совершили прорыв в квантовых вычислениях",
-                link: "https://news.yandex.ru/story/Kvantovye_vychisleniya_proryv",
-                description: "Российские исследователи добились прогресса."
+                link: "https://news.yandex.ru",
+                description: "Российские исследователи добились прогресса в создании квантовых процессоров."
+            },
+            {
+                title: "Новая космическая программа исследования Марса",
+                link: "https://news.yandex.ru",
+                description: "Роскосмос начинает совместную миссию по изучению Красной планеты."
             }
         ];
 
-        this.displayNews(mockNews, true);
+        this.displayNews(demoNews, true);
     }
 
     showError(message) {
@@ -211,4 +217,3 @@ const newsStyles = `
 const styleSheet = document.createElement('style');
 styleSheet.textContent = newsStyles;
 document.head.appendChild(styleSheet);
-
